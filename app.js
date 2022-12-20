@@ -5,6 +5,8 @@ const app = express();
 const mongoose = require("mongoose"); // 載入mongoose
 const exphbs = require("express-handlebars"); // 載入樣版引擎Handlebars
 
+const Todo = require("./models/todo"); // 載入Todo model
+
 // 建立一個叫hbs的樣版引擎, 傳入相關參數
 // 指定副檔名為 .hbs，才能把預設的長檔名改寫成短檔名
 app.engine("hbs", exphbs({ defaultLayout: "main", extname: ".hbs" }));
@@ -35,7 +37,11 @@ db.once("open", () => {
 
 // 設定首頁路由
 app.get("/", (req, res) => {
-  res.send("hello worod");
+  // 拿到全部的todo資料
+  Todo.find() // 從資料庫找出資料 (目前沒有傳入參數，所以會撈出整份資料)
+    .lean() // 將ｍongoose的Model物件轉換成單純js物件(陣列物件)
+    .then((todos) => res.render("index", { todos })) // 將資料傳給index樣本
+    .catch((error) => console.error(error)); // 錯誤處理
 });
 
 // 設定 port 3000
