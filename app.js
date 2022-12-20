@@ -1,17 +1,22 @@
 // 載入 express 並建構應用程式伺服器
 const express = require("express");
-const app = express();
-
 const mongoose = require("mongoose"); // 載入mongoose
 const exphbs = require("express-handlebars"); // 載入樣版引擎Handlebars
+// 引用 body-parser
+const bodyParser = require("body-parser");
 
 const Todo = require("./models/todo"); // 載入Todo model
+
+const app = express();
 
 // 建立一個叫hbs的樣版引擎, 傳入相關參數
 // 指定副檔名為 .hbs，才能把預設的長檔名改寫成短檔名
 app.engine("hbs", exphbs({ defaultLayout: "main", extname: ".hbs" }));
 // 啟用樣版引擎
 app.set("view engine", "hbs");
+
+// 用 app.use 規定每一筆請求都需要透過 body-parser 進行前置處理
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // 加入這段 code, 僅在非正式環境時, 使用 dotenv
 if (process.env.NODE_ENV !== "production") {
@@ -42,6 +47,22 @@ app.get("/", (req, res) => {
     .lean() // 將ｍongoose的Model物件轉換成單純js物件(陣列物件)
     .then((todos) => res.render("index", { todos })) // 將資料傳給index樣本
     .catch((error) => console.error(error)); // 錯誤處理
+});
+
+app.get("/todos/new", (req, res) => {
+  return res.render("new"); // 去拿new樣本(在views下建立new.hbs)
+});
+
+// 建立新的Todo
+app.post("/todos", (req, res) => {
+  const name = req.body.name;
+  const todo = new Todo({
+    name,
+  });
+  return todo
+    .save()
+    .then(() => res.redirect("/"))
+    .catch((error) => console.error(error));
 });
 
 // 設定 port 3000
