@@ -54,18 +54,25 @@ app.get("/todos/new", (req, res) => {
 });
 
 // 建立新的Todo
+// app.post是Express 提供的路由方法，可以篩選出 HTTP 動詞為 POST 的請求
 app.post("/todos", (req, res) => {
-  const name = req.body.name;
-  const todo = new Todo({
-    name,
-  });
-  return todo
-    .save()
-    .then(() => res.redirect("/"))
+  const name = req.body.name; // 從 req.body 拿出表單裡的 name 資料
+
+  // 作法二：從Todo產生產生編輯資料情境必須採用
+  // const todo = new Todo({
+  //   // 存入資料庫
+  //   name,
+  // });
+  // return todo
+  //   .save()
+
+  // 作法一: 呼叫Todo物件直接心增資料
+  return Todo.create({ name })
+    .then(() => res.redirect("/")) // 新增完成後導回首頁
     .catch((error) => console.error(error));
 });
 
 // 設定 port 3000
-app.listen(3000, () => {
-  console.log("App is running on http://localhost:3000");
+app.listen(3001, () => {
+  console.log("App is running on http://localhost:3001");
 });
