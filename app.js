@@ -36,6 +36,7 @@ app.get("/", (req, res) => {
   // 拿到全部的todo資料
   Todo.find() // 從資料庫找出資料 (目前沒有傳入參數，所以會撈出整份資料)
     .lean() // 將ｍongoose的Model物件轉換成單純js物件(陣列物件)
+    .sort({ _id: "asc" }) // desc
     .then((todos) => res.render("index", { todos })) // 將資料傳給index樣本
     .catch((error) => console.error(error)); // 錯誤處理
 });
