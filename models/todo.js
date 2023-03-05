@@ -10,6 +10,7 @@ const todoSchema = new Schema({
   },
   done: {
     type: Boolean,
+    default: false,
   },
 });
 

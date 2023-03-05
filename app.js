@@ -38,7 +38,7 @@ db.once("open", () => {
   console.log("mongodb connected!");
 });
 
-// 設定首頁路由
+// setting route
 app.get("/", (req, res) => {
   // 拿到全部的todo資料
   Todo.find() // 從資料庫找出資料 (目前沒有傳入參數，所以會撈出整份資料)
@@ -47,16 +47,17 @@ app.get("/", (req, res) => {
     .catch((error) => console.error(error)); // 錯誤處理
 });
 
+// creat page
 app.get("/todos/new", (req, res) => {
   return res.render("new"); // 去拿new樣本(在views下建立new.hbs)
 });
 
-// 建立新的Todo
+// creat todo
 // app.post是Express 提供的路由方法，可以篩選出 HTTP 動詞為 POST 的請求
 app.post("/todos", (req, res) => {
   const name = req.body.name; // 從 req.body 拿出表單裡的 name 資料
 
-  // 作法二：從Todo產生產生編輯資料情境必須採用
+  // 作法二：從Todo產生編輯資料情境必須採用
   // const todo = new Todo({
   //   // 存入資料庫
   //   name,
@@ -70,7 +71,7 @@ app.post("/todos", (req, res) => {
     .catch((error) => console.error(error));
 });
 
-// 瀏覽特定To-do
+// detail page
 app.get("/todos/:id", (req, res) => {
   const id = req.params.id;
   return Todo.findById(id)
@@ -79,29 +80,31 @@ app.get("/todos/:id", (req, res) => {
     .catch((error) => console.log(error));
 });
 
-// 編輯/更新特定To-do頁面
+// edit page
 app.get("/todos/:id/edit", (req, res) => {
   const id = req.params.id;
+  const { name, done } = req.body;
   return Todo.findById(id)
     .lean()
     .then((todo) => res.render("edit", { todo }))
     .catch((error) => console.log(error));
 });
 
-// 更新To-do後,存進資料庫
+// update To-do
 app.post("/todos/:id/edit", (req, res) => {
   const id = req.params.id;
-  const name = req.body.name;
+  const { name, done } = req.body;
   return Todo.findById(id)
     .then((todo) => {
       todo.name = name;
+      todo.done = done === "on";
       return todo.save();
     })
     .then(() => res.redirect(`/todos/${id}`))
     .catch((error) => console.log(error));
 });
 
-// 刪除特定To-do
+// delete To-do
 app.post("/todos/:id/delete", (req, res) => {
   const id = req.params.id;
   return Todo.findById(id)
