@@ -6,9 +6,7 @@ const exphbs = require("express-handlebars"); // 載入樣版引擎Handlebars
 const bodyParser = require("body-parser");
 
 const Todo = require("./models/todo"); // 載入Todo model
-
 const app = express();
-
 // 建立一個叫hbs的樣版引擎, 傳入相關參數
 // 指定副檔名為 .hbs，才能把預設的長檔名改寫成短檔名
 app.engine("hbs", exphbs({ defaultLayout: "main", extname: ".hbs" }));
@@ -66,9 +64,9 @@ app.post("/todos", (req, res) => {
   // return todo
   //   .save()
 
-  // 作法一: 呼叫Todo物件直接心增資料
+  // 作法一: 呼叫Todo物件直接新增資料
   return Todo.create({ name })
-    .then(() => res.redirect("/")) // 新增完成後導回首頁
+    .then(() => res.re.direct("/")) // 新增完成後導回首頁
     .catch((error) => console.error(error));
 });
 
