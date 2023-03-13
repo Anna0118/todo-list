@@ -11,7 +11,7 @@ require("dotenv").config();
 
 const app = express();
 // 如果在 Heroku 環境則使用 process.env.PORT
-const PORT=process.env.PORT || 3000 // 否則為本地環境，使用 3000 
+const PORT = process.env.PORT || 3000; // 否則為本地環境，使用 3000
 
 app.engine("hbs", exphbs({ defaultLayout: "main", extname: ".hbs" })); // set template engine
 app.set("view engine", "hbs"); // 啟用樣版引擎
