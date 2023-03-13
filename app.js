@@ -3,10 +3,11 @@ const express = require("express");
 const exphbs = require("express-handlebars"); // 載入樣版引擎Handlebars
 const bodyParser = require("body-parser"); // 引用 body-parser
 const methodOverride = require("method-override"); // 載入 method-override
-require("dotenv").config();
+
 // 載入自製模組
 const routes = require("./routes"); // 引用路由器
 require("./config/mongoose");
+require("dotenv").config();
 
 const app = express();
 // 如果在 Heroku 環境則使用 process.env.PORT
@@ -21,5 +22,5 @@ app.use(routes); // 將 request 導入路由器
 
 // 設定 port 3000
 app.listen(PORT, () => {
-  console.log(`App is running on http://localhost:${3000}`);
+  console.log(`App is running on http://localhost:${PORT}`);
 });
