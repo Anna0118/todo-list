@@ -3,7 +3,7 @@ const express = require("express");
 const exphbs = require("express-handlebars"); // 載入樣版引擎Handlebars
 const bodyParser = require("body-parser"); // 引用 body-parser
 const methodOverride = require("method-override"); // 載入 method-override
-
+require("dotenv").config();
 // 載入自製模組
 const routes = require("./routes"); // 引用路由器
 require("./config/mongoose");
